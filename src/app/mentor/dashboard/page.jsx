@@ -1,18 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  Users,
-  Award,
-  BarChart3,
-  CheckCircle,
-  Clock,
-  Star,
-  FileText,
-  Target,
-  TrendingUp,
-  Edit,
-  Search
-} from "lucide-react";
+import { Users, Award, BarChart3, CircleCheck as CheckCircle, Clock, Star, FileText, Target, TrendingUp, CreditCard as Edit, Search } from "lucide-react";
 import useUser from "@/utils/useUser";
 
 export default function MentorDashboard() {
