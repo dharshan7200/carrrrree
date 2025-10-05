@@ -8,10 +8,10 @@ export default function LandingPage() {
   const userRoles = [
     {
       id: "student",
-      title: "Student",
+      title: "12th Standard Student",
       subtitle: "Take quizzes & discover your ideal career path",
       icon: GraduationCap,
-      gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      gradient: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
       href: "/student/dashboard"
     },
     {
@@ -19,15 +19,15 @@ export default function LandingPage() {
       title: "Graduate",
       subtitle: "Upload resume & get AI-powered job recommendations",
       icon: Target,
-      gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      gradient: "linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)",
       href: "/graduate/dashboard"
     },
     {
       id: "mentor",
-      title: "Mentor",
+      title: "Industry Mentor",
       subtitle: "Guide students & evaluate their progress",
       icon: Users,
-      gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+      gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
       href: "/mentor/dashboard"
     },
     {
@@ -35,7 +35,7 @@ export default function LandingPage() {
       title: "Admin",
       subtitle: "Manage platform & view analytics",
       icon: Award,
-      gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+      gradient: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
       href: "/admin/dashboard"
     }
   ];
@@ -48,7 +48,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-100">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         {/* Background Pattern */}
@@ -64,7 +64,7 @@ export default function LandingPage() {
             {/* Main Heading */}
             <h1 className="font-inter font-bold text-4xl sm:text-5xl lg:text-6xl leading-tight text-gray-900 mb-6">
               Smart Education for{" "}
-              <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent">
                 Future-Ready Careers
               </span>
             </h1>
@@ -82,7 +82,7 @@ export default function LandingPage() {
                   onMouseDown={() => setPressedButton("get-started")}
                   onMouseUp={() => setPressedButton(null)}
                   onMouseLeave={() => setPressedButton(null)}
-                  className="h-[48px] px-8 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold font-inter transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="h-[48px] px-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold font-inter transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   style={{
                     transform: pressedButton === "get-started" ? "scale(0.95)" : "scale(1)",
                   }}
@@ -95,7 +95,7 @@ export default function LandingPage() {
                   onMouseDown={() => setPressedButton("learn-more")}
                   onMouseUp={() => setPressedButton(null)}
                   onMouseLeave={() => setPressedButton(null)}
-                  className="h-[48px] px-8 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-semibold font-inter transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="h-[48px] px-8 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-semibold font-inter transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   style={{
                     transform: pressedButton === "learn-more" ? "scale(0.95)" : "scale(1)",
                   }}
@@ -111,8 +111,8 @@ export default function LandingPage() {
                 const IconComponent = stat.icon;
                 return (
                   <div key={index} className="text-center">
-                    <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-indigo-100 flex items-center justify-center">
-                      <IconComponent size={20} className="text-indigo-600" />
+                    <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-blue-100 flex items-center justify-center">
+                      <IconComponent size={20} className="text-blue-600" />
                     </div>
                     <div className="font-bold text-2xl text-gray-900 mb-1">{stat.value}</div>
                     <div className="text-sm text-gray-600">{stat.label}</div>
@@ -146,7 +146,7 @@ export default function LandingPage() {
                   <div
                     onMouseEnter={() => setHoveredRole(role.id)}
                     onMouseLeave={() => setHoveredRole(null)}
-                    className="group cursor-pointer transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded-xl"
+                    className="group cursor-pointer transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-xl"
                     style={{
                       transform: isHovered ? "translateY(-8px)" : "translateY(0px)",
                     }}
@@ -215,8 +215,8 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-6">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-100 flex items-center justify-center">
-                <Brain size={28} className="text-indigo-600" />
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-100 flex items-center justify-center">
+                <Brain size={28} className="text-blue-600" />
               </div>
               <h3 className="font-inter font-semibold text-xl text-gray-900 mb-3">
                 AI Skill Extraction
@@ -227,8 +227,8 @@ export default function LandingPage() {
             </div>
 
             <div className="text-center p-6">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-100 flex items-center justify-center">
-                <Target size={28} className="text-purple-600" />
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-cyan-100 flex items-center justify-center">
+                <Target size={28} className="text-cyan-600" />
               </div>
               <h3 className="font-inter font-semibold text-xl text-gray-900 mb-3">
                 Job Ontology Mapping
@@ -239,8 +239,8 @@ export default function LandingPage() {
             </div>
 
             <div className="text-center p-6">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-100 flex items-center justify-center">
-                <TrendingUp size={28} className="text-blue-600" />
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-teal-100 flex items-center justify-center">
+                <TrendingUp size={28} className="text-teal-600" />
               </div>
               <h3 className="font-inter font-semibold text-xl text-gray-900 mb-3">
                 Personalized Recommendations

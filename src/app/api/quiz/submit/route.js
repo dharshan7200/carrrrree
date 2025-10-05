@@ -1,37 +1,38 @@
-import sql from "@/app/api/utils/sql";
-import { auth } from "@/auth";
-
-// Simple degree recommendation logic based on subject performance
-const getDegreeRecommendation = (subjectId, scorePercentage) => {
+const getDegreeRecommendation = (subjectName, scorePercentage) => {
   const recommendations = {
-    1: { // Biology
-      high: "Biomedical Engineering",
-      medium: "Life Sciences",
-      low: "General Biology"
+    'Physics': {
+      high: 'Aerospace Engineering',
+      medium: 'Mechanical Engineering',
+      low: 'Applied Physics'
     },
-    2: { // Chemistry
-      high: "Chemical Engineering", 
-      medium: "Chemistry",
-      low: "Applied Chemistry"
+    'Chemistry': {
+      high: 'Chemical Engineering',
+      medium: 'Chemistry',
+      low: 'Applied Chemistry'
     },
-    3: { // Physics
-      high: "Aerospace Engineering",
-      medium: "Physics",
-      low: "Applied Physics"
+    'Mathematics': {
+      high: 'Data Science & Analytics',
+      medium: 'Mathematics & Computing',
+      low: 'Applied Mathematics'
     },
-    4: { // Mathematics
-      high: "Data Science & Analytics",
-      medium: "Mathematics",
-      low: "Applied Mathematics"
+    'Biology': {
+      high: 'Biomedical Engineering',
+      medium: 'Biotechnology',
+      low: 'Life Sciences'
     },
-    5: { // Computer Science
-      high: "Artificial Intelligence & Data Science",
-      medium: "Computer Science Engineering",
-      low: "Information Technology"
+    'Computer Science': {
+      high: 'Artificial Intelligence & Data Science',
+      medium: 'Computer Science Engineering',
+      low: 'Information Technology'
+    },
+    'Aptitude': {
+      high: 'Multi-disciplinary Engineering',
+      medium: 'General Engineering',
+      low: 'Foundation Engineering'
     }
   };
 
-  const subjectRecs = recommendations[subjectId];
+  const subjectRecs = recommendations[subjectName];
   if (!subjectRecs) return null;
 
   if (scorePercentage >= 80) return subjectRecs.high;
@@ -39,37 +40,35 @@ const getDegreeRecommendation = (subjectId, scorePercentage) => {
   return subjectRecs.low;
 };
 
-export async function POST(request) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
-  }
+const questionDatabase = {
+  '1-1': 'A', '1-2': 'C', '1-3': 'A', '1-4': 'B', '1-5': 'A',
+  '1-6': 'B', '1-7': 'C', '1-8': 'A', '1-9': 'B', '1-10': 'C',
+  '2-1': 'C', '2-2': 'B', '2-3': 'C', '2-4': 'A', '2-5': 'B',
+  '2-6': 'B', '2-7': 'C', '2-8': 'C', '2-9': 'A', '2-10': 'B'
+};
 
+const subjectNames = {
+  '1': 'Physics',
+  '2': 'Chemistry',
+  '3': 'Mathematics',
+  '4': 'Biology',
+  '5': 'Computer Science',
+  '6': 'Aptitude'
+};
+
+export async function POST(request) {
   try {
     const body = await request.json();
     const { subjectId, answers, timeTaken } = body;
 
     if (!subjectId || !answers || !Array.isArray(answers)) {
-      return Response.json({ error: "Invalid quiz data" }, { status: 400 });
+      return Response.json({ error: 'Invalid quiz data' }, { status: 400 });
     }
 
-    // Get correct answers for the questions
-    const questionIds = answers.map(a => a.questionId);
-    const questions = await sql`
-      SELECT id, correct_option
-      FROM quiz_questions
-      WHERE id = ANY(${questionIds})
-    `;
-
-    // Calculate score
     let correctCount = 0;
-    const questionMap = {};
-    questions.forEach(q => {
-      questionMap[q.id] = q.correct_option;
-    });
-
     answers.forEach(answer => {
-      if (questionMap[answer.questionId] === answer.selectedOption) {
+      const correctAnswer = questionDatabase[answer.questionId];
+      if (correctAnswer && correctAnswer === answer.selectedOption) {
         correctCount++;
       }
     });
@@ -77,39 +76,24 @@ export async function POST(request) {
     const totalQuestions = answers.length;
     const scorePercentage = (correctCount / totalQuestions) * 100;
 
-    // Save quiz attempt
-    const quizAttempt = await sql`
-      INSERT INTO quiz_attempts (user_id, subject_id, total_questions, correct_answers, score_percentage, time_taken_minutes)
-      VALUES (${session.user.id}, ${subjectId}, ${totalQuestions}, ${correctCount}, ${scorePercentage}, ${timeTaken})
-      RETURNING *
-    `;
-
-    // Generate degree recommendation if score is good
+    const subjectName = subjectNames[subjectId] || 'General';
     let recommendedDegree = null;
     if (scorePercentage >= 60) {
-      recommendedDegree = getDegreeRecommendation(parseInt(subjectId), scorePercentage);
-      
-      if (recommendedDegree) {
-        // Save degree recommendation
-        await sql`
-          INSERT INTO degree_recommendations (user_id, recommended_degree, confidence_score, reasoning, based_on_subjects)
-          VALUES (${session.user.id}, ${recommendedDegree}, ${scorePercentage}, 
-                  'Based on quiz performance', ARRAY[(SELECT subject_name FROM quiz_subjects WHERE id = ${subjectId})])
-        `;
-      }
+      recommendedDegree = getDegreeRecommendation(subjectName, scorePercentage);
     }
 
     return Response.json({
-      quizAttemptId: quizAttempt[0].id,
+      quizAttemptId: `attempt-${Date.now()}`,
       scorePercentage,
       correctCount,
       totalQuestions,
       recommendedDegree,
-      timeTaken
+      timeTaken,
+      subjectName
     });
 
   } catch (error) {
-    console.error("Error submitting quiz:", error);
-    return Response.json({ error: "Failed to submit quiz" }, { status: 500 });
+    console.error('Error submitting quiz:', error);
+    return Response.json({ error: 'Failed to submit quiz' }, { status: 500 });
   }
 }
